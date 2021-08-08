@@ -21,23 +21,21 @@ export default {
   },
   data: () => {
     return {
-      users: [
-        {
-          "user":1,
-          "name" :"משה",
-          "picture": "https://image.freepik.com/free-icon/user-silhouette_318-79814.jpg"
-        },
-        {
-          "user":2,
-          "name" :"חיים",
-          "picture": "https://thumb1.shutterstock.com/display_pic_with_logo/1442480/564112600/stock-vector-businessman-icon-564112600.jpg"
-        },
-        {
-          "user":3,
-          "name" :"אבי",
-          "picture": "https://thumb1.shutterstock.com/display_pic_with_logo/2239973/365127620/stock-vector-man-icon-365127620.jpg"
+      users: [],
+    }
+  },
+  async mounted() {
+    try {
+      const response = await fetch('http://www.mocky.io/v2/59bd9a773c00001303529fe0', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
         }
-      ]
+      });
+      const jsonResponse = await response.json();
+      this.users = jsonResponse.users;
+    } catch (err) {
+      console.log(">>>>>>>>>> Error", err);
     }
   }
 }
