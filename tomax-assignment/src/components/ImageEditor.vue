@@ -10,22 +10,48 @@
 <script>
 export default {
   name: 'ImageEditor',
+  props: {
+    drop: Object
+  },
+  data: () => {
+    return {
+      ctx: null
+    }
+  },
+  methods: {
+    dropImage() {
+      let image = new Image();
+      image.src = this.$props.drop.photo;
+      this.ctx.drawImage(image, this.$props.drop.offsetX, this.$props.drop.offsetY, 80, 80);
+    }
+  },
   mounted() {
     var canvas = this.$refs.imageEditor,
         container = this.$refs.imageEditorContainer,
-        ctx = canvas.getContext("2d");
-
+        ctx;
+    
+    this.ctx = ctx = canvas.getContext("2d");
+    
     canvas.width = container.offsetWidth;
     canvas.height = container.offsetHeight;
-    
+
     var background = new Image();
     background.src = "https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=400&w=600";
     
     // Make sure the image is loaded first otherwise nothing will draw.
-    background.onload = function(){
-      ctx.drawImage(background, 0, 0, container.offsetWidth, container.offsetHeight);   
+    background.onload = function() {
+      ctx.drawImage(background, 0, 0, container.offsetWidth, container.offsetHeight);
     }
   },
+
+  watch: {
+    drop: {
+      deep: true,
+      handler() {
+        this.dropImage();
+      }
+    }
+  }
 }
 </script>
 
@@ -41,7 +67,9 @@ export default {
 
 .image-editor__canvas {
   width: 100%;
-  height: 100%;  
+  height: 100%;
+  border-radius: 10px;
+  transition: opacity .2s ease;
 }
 
 .tmx-button {
