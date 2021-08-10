@@ -48,7 +48,6 @@ export default {
     document.addEventListener('dragstart', function (e) {
       dragged = e.target.src;
       code = e.target.dataset.code;
-
     }, false);
     
     document.addEventListener('dragend', function () {
@@ -62,15 +61,17 @@ export default {
 
     document.addEventListener("dragenter", function (e) {
       // highlight potential drop target when the draggable element enters it
-      if ( e.target.className == "image-editor__canvas" ) {
-          e.target.style.opacity = "0.5";
+      if ( e.target.className == "image-editor__images" ) {
+          e.target.style.boxShadow = "inset 0 0 0 20px rgba(0, 0, 0, 0.2)";
+          e.target.style.borderColor = "rgb(33, 166, 126)";
       }
     }, false);
     
     document.addEventListener("dragleave", function (e) {
       // highlight potential drop target when the draggable element enters it
-      if ( e.target.className == "image-editor__canvas" ) {
-          e.target.style.opacity = "1";
+      if ( e.target.className == "image-editor__images" ) {
+          e.target.style.boxShadow = "inset 0 0 0 0 rgba(0, 0, 0, 0)";
+          e.target.style.borderColor = "transparent";
       }
     }, false);
 
@@ -78,8 +79,9 @@ export default {
       // prevent default action (open as link for some elements)
       e.preventDefault();
       
-      if ( e.target.className == "image-editor__canvas" ) {
-        e.target.style.opacity = "1";
+      if ( e.target.className == "image-editor__images" ) {
+        e.target.style.boxShadow = "inset 0 0 0 0 rgba(0, 0, 0, 0)";
+        e.target.style.borderColor = "transparent";
         
         if (parseInt(context.code) === parseInt(code)) {
           context.$emit('drop', {
@@ -89,8 +91,7 @@ export default {
           });
         }
       }
-    
-  }, false);
+    }, false);
   }
 }
 </script>
