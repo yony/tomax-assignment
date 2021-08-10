@@ -1,7 +1,13 @@
 <template>
   <div class="user">
-    <div class="user__photo">
-      <img :src="photo" :alt="name" />
+    <div ref="photo" class="user__photo">
+      <img
+        :src="photo"
+        :data-code="code"
+        :alt="name"
+        draggable="true"
+        v-on:dragstart="onDragStart"
+      />
     </div>
     <div class="user__details">
       <h3>{{ name }}</h3>
@@ -17,6 +23,74 @@ export default {
     name: String,
     code: Number,
     photo: String
+  },
+  data: () => {
+    return {
+      mouseOffsetX: null,
+      mouseOffsetY: null,
+    }
+  },
+  methods: {
+    onDragStart:function(e) {
+      e.dataTransfer.setData('text/plain', null);
+
+      const rect = e.target.getBoundingClientRect();
+
+      this.mouseOffsetX = e.clientX - rect.x;
+      this.mouseOffsetY = e.clientY - rect.y;
+    }
+  },
+  mounted() {
+    let dragged,
+        code,
+        context = this;
+
+    document.addEventListener('dragstart', function (e) {
+      dragged = e.target.src;
+      code = e.target.dataset.code;
+
+    }, false);
+    
+    document.addEventListener('dragend', function () {
+      dragged = null;
+      code = null;
+    }, false);
+
+    document.addEventListener("dragover", function (e) {
+      e.preventDefault();
+    }, false);
+
+    document.addEventListener("dragenter", function (e) {
+      // highlight potential drop target when the draggable element enters it
+      if ( e.target.className == "image-editor__canvas" ) {
+          e.target.style.opacity = "0.5";
+      }
+    }, false);
+    
+    document.addEventListener("dragleave", function (e) {
+      // highlight potential drop target when the draggable element enters it
+      if ( e.target.className == "image-editor__canvas" ) {
+          e.target.style.opacity = "1";
+      }
+    }, false);
+
+    document.addEventListener("drop", function (e) {
+      // prevent default action (open as link for some elements)
+      e.preventDefault();
+      
+      if ( e.target.className == "image-editor__canvas" ) {
+        e.target.style.opacity = "1";
+        
+        if (parseInt(context.code) === parseInt(code)) {
+          context.$emit('drop', {
+            photo: dragged,
+            offsetX: e.layerX - context.mouseOffsetX,
+            offsetY: e.layerY - context.mouseOffsetY
+          });
+        }
+      }
+    
+  }, false);
   }
 }
 </script>
@@ -43,20 +117,20 @@ export default {
   border-radius: 8px;
   margin-right: 10px;
   background-color: rgb(223, 223, 223);
-  cursor: grab;
-  cursor: -moz-grab;
-  cursor: -webkit-grab;
-}
-
-.user__photo:active {
-  cursor: grabbing;
-  cursor: -moz-grabbing;
-  cursor: -webkit-grabbing;
 }
 
 .user__photo img {
   max-width: 80px;
   height: auto;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.user__photo:active img {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
 }
 
 .user__details {

@@ -1,9 +1,16 @@
 <template>
   <div class="container">
     <section class="user-images">
-      <ImageEditor class="user-images__editor"></ImageEditor>
+      <ImageEditor class="user-images__editor" :drop="drop"></ImageEditor>
       <div class="user-images__user-list">
-        <User v-for="user in users" :key="user.user" :name="user.name" :code="user.user" :photo="user.picture" />
+        <User
+          v-for="user in users"
+          :key="user.user"
+          :name="user.name"
+          :code="user.user"
+          :photo="user.picture"
+          @drop="setUserImageOnCanvas"
+        ></User>
       </div>
     </section>
   </div>
@@ -22,6 +29,12 @@ export default {
   data: () => {
     return {
       users: [],
+      drop: {},
+    }
+  },
+  methods: {
+    setUserImageOnCanvas(value) {
+      this.drop = value;
     }
   },
   async mounted() {
