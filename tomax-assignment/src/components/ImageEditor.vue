@@ -56,21 +56,37 @@ export default {
 
       this.images.push(newImage);
     },
+
     resizeImage(value) {
       this.images[value.index].width = value.width;
       this.images[value.index].height = value.height;
     },
+
     placeImageOnCanvas(image) {
       let imageItem = new Image();
+      imageItem.crossOrigin = null;
       imageItem.src = image.src;
-      // imageItem.crossOrigin = "Anonymous";
       this.ctx.drawImage(imageItem, image.x, image.y, image.width, image.height);
     },
-    downloadImage() {
+
+    placeAllImagesOnCanvas() {
       for (let image of this.images) {
         this.placeImageOnCanvas(image);
       }
       this.images = [];
+    },
+
+    async downloadImage() {
+      await this.placeAllImagesOnCanvas();
+
+      let link = document.createElement('a');
+      link.download = 'filename.png';
+      try {
+        link.href = this.$refs.imageEditor.toDataURL("image/png");
+      } catch (err) {
+        console.log(">>>>>>>>>> Error placing image on canvas", err);
+      }
+      link.click();
     },
   },
   mounted() {
@@ -84,6 +100,7 @@ export default {
     canvas.height = container.offsetHeight;
 
     var background = new Image();
+    background.crossOrigin = "Anonymous";
     background.src = "https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=400&w=600";
     
     // Make sure the image is loaded first otherwise nothing will draw.

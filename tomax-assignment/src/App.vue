@@ -48,7 +48,7 @@ export default {
       const jsonResponse = await response.json();
       this.users = jsonResponse.users;
     } catch (err) {
-      console.log(">>>>>>>>>> Error", err);
+      console.log(">>>>>>>>>> Error loading users", err);
     }
   }
 }
