@@ -39,7 +39,7 @@ export default {
   },
   async mounted() {
     try {
-      const response = await fetch('http://www.mocky.io/v2/59bd9a773c00001303529fe0', {
+      const response = await fetch('https://www.mocky.io/v2/59bd9a773c00001303529fe0', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
