@@ -64,7 +64,7 @@ export default {
 
     placeImageOnCanvas(image) {
       let imageItem = new Image();
-      imageItem.crossOrigin = null;
+      imageItem.crossOrigin = "anonymous";
       imageItem.src = image.src;
       this.ctx.drawImage(imageItem, image.x, image.y, image.width, image.height);
     },
@@ -100,7 +100,7 @@ export default {
     canvas.height = container.offsetHeight;
 
     var background = new Image();
-    background.crossOrigin = "Anonymous";
+    background.crossOrigin = "anonymous";
     background.src = "https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=400&w=600";
     
     // Make sure the image is loaded first otherwise nothing will draw.
