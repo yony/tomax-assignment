@@ -26,17 +26,20 @@ export default {
     ImageEditor,
     User,
   },
+
   data: () => {
     return {
       users: [],
       drop: {},
     }
   },
+
   methods: {
     setUserImageOnCanvas(value) {
       this.drop = value;
     }
   },
+
   async mounted() {
     try {
       const response = await fetch('https://www.mocky.io/v2/59bd9a773c00001303529fe0', {
