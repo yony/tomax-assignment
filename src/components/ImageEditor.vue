@@ -65,7 +65,7 @@ export default {
     placeImageOnCanvas(image) {
       let imageItem = new Image();
       imageItem.crossOrigin = "anonymous";
-      imageItem.src = image.src;
+      imageItem.src = image.src + "?not-from-cache-please";
       this.ctx.drawImage(imageItem, image.x, image.y, image.width, image.height);
     },
 
