@@ -8,11 +8,13 @@
           class="image-edit"
           :width="image.width"
           :height="image.height"
+          :rotate="image.rotate"
           :index="index"
           :style="`top: ${image.y}px;
                    left: ${image.x}px;
                    transform: rotate(${image.rotate}deg);`"
           @resize="resizeImage"
+          @rotate="rotateImage"
         >
           <img
             :src="image.src"
@@ -60,6 +62,10 @@ export default {
     resizeImage(value) {
       this.images[value.index].width = value.width;
       this.images[value.index].height = value.height;
+    },
+    
+    rotateImage(value) {
+      this.images[value.index].rotate = value.rotate;
     },
 
     placeImageOnCanvas(image) {
